@@ -1,12 +1,19 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+//
 const routes = require("./src/routes");
 const app = express();
 app.use(express.json());
-const port = 3333;
+// app.use(
+//   cors({
+//     origin: "*",
+//   })
+// );
+const port = Number(process.env.PORT || 3333);
 
 async function connectDatabase() {
-  await mongoose.connect("mongodb://localhost:27017");
+  await mongoose.connect(process.env.DB_URL);
 }
 
 app.listen(port, () => {
@@ -14,5 +21,5 @@ app.listen(port, () => {
     console.log(`Error connecting database: ${error}`);
   });
   app.use("/", routes);
-  console.log("App is running at port 3333");
+  console.log(`App is running at port ${port}`);
 });
